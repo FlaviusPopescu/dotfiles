@@ -56,17 +56,16 @@ compdef _directories md
 setopt glob_dots     # no special treatment for file names with a leading dot
 setopt no_auto_menu  # require an extra TAB press to open the completion menu
 
-export ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|md *|git clone *|mv *|cp *|rm *|rmdir *|l *"
+export ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|md *|git clone *|mv *|cp *|rm *|rmdir *|l *|echo *"
 
 # environment setup
-source "$HOME/.env.android"
-source "$HOME/.env.jdk"
-source "$HOME/.env.sensitive"
-source "$HOME/.env.shell"
-source "$HOME/.env.py"
-
-# aliases
-source "$HOME/.env.aliases"
+function load_source() { [[ -f $1 ]] && source $1 }
+load_source "$HOME/.env.aliases"
+load_source "$HOME/.env.android"
+load_source "$HOME/.env.jdk"
+load_source "$HOME/.env.py"
+load_source "$HOME/.env.sensitive"
+load_source "$HOME/.env.shell"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
