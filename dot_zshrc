@@ -1,0 +1,84 @@
+# Documentation: https://github.com/romkatv/zsh4humans/blob/v5/README.md.
+zstyle ':z4h:bindkey' keyboard  'mac'
+# Start tmux if not already in tmux.
+zstyle ':z4h:' start-tmux command tmux -u new -A -D -t z4h
+# Whether to move prompt to the bottom when zsh starts and on Ctrl+L.
+zstyle ':z4h:' prompt-at-bottom 'no'
+# Mark up shell's output with semantic information.
+zstyle ':z4h:' term-shell-integration 'yes'
+# Right-arrow accepts one character ('partial-accept') from autosuggest or whole thing ('accept')?
+zstyle ':z4h:autosuggestions' forward-char 'accept'
+# Disable autosuggestions
+# zstyle ':z4h:zsh-autosuggestions' channel 'none'
+
+# Recursively traverse directories when TAB-completing files.
+zstyle ':z4h:fzf-complete' recurse-dirs 'no'
+# Enable direnv to automatically source .envrc files.
+zstyle ':z4h:direnv'         enable 'no'
+# Show "loading" and "unloading" notifications from direnv.
+zstyle ':z4h:direnv:success' notify 'yes'
+
+# SSH Teleportation
+zstyle ':z4h:ssh:example-hostname1'   enable 'yes'
+zstyle ':z4h:ssh:*.example-hostname2' enable 'no'
+zstyle ':z4h:ssh:*'                   enable 'no'
+# Send files over to the remote host when connecting over SSH to the enabled hosts.
+zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh'
+
+# Install or update core components (fzf, zsh-autosuggestions, etc.) and
+# initialize Zsh. After this point console I/O is unavailable until Zsh
+# is fully initialized. Everything that requires user interaction or can
+# perform network I/O must be done above. Everything else is best done below.
+z4h init || return
+# Extend PATH.
+path=(~/bin $path)
+# Export environment variables.
+export GPG_TTY=$TTY
+# Source additional local files if they exist.
+z4h source ~/.env.zsh
+
+# Define key bindings.
+z4h bindkey undo Ctrl+/   Shift+Tab  # undo the last command line change
+z4h bindkey redo Option+/            # redo the last undone command line change
+z4h bindkey z4h-cd-back    Shift+Left   # cd into the previous directory
+z4h bindkey z4h-cd-forward Shift+Right  # cd into the next directory
+z4h bindkey z4h-cd-up      Shift+Up     # cd into the parent directory
+z4h bindkey z4h-cd-down    Shift+Down   # cd into a child directory
+
+# Autoload functions.
+autoload -Uz zmv
+
+# Define functions and completions.
+function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
+compdef _directories md
+
+# Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
+setopt glob_dots     # no special treatment for file names with a leading dot
+setopt no_auto_menu  # require an extra TAB press to open the completion menu
+
+export ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|md *|git clone *|mv *|cp *|rm *|rmdir *|l *"
+
+# environment setup
+source "$HOME/.env.android"
+source "$HOME/.env.jdk"
+source "$HOME/.env.sensitive"
+source "$HOME/.env.shell"
+source "$HOME/.py/.env.py"
+
+# aliases
+source "$HOME/.env.aliases"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/owl/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/owl/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/owl/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/owl/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<

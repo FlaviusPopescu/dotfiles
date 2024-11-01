@@ -1,0 +1,13 @@
+profile_zsh_start() {
+    runs=10
+    echo "Profiling $SHELL start ($runs runs)..."
+    for i in $(seq 1 $runs) ; do
+        { time zsh -i -c exit &>/dev/null } 2>&1 | awk -F'=' '{print $NF}'
+    done | \
+    awk '{total+=$1;count++;printf "Started in %sms\n", $1} END \
+        {printf "Average zsh start time: %.3fsecs\n", total/count}'
+}
+
+refresh() {
+    exec zsh
+}

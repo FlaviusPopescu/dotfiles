@@ -1,0 +1,16 @@
+# files
+alias tree='tree -a -I .git'
+alias l="${aliases[ls]:-ls} -A"
+
+# gradle
+alias gd='./gradlew'
+
+# git
+for alias in $(git --list-cmds=alias); do
+    alias g$alias="git $alias"
+done
+alias tsg='tig status'
+
+# misc
+alias cm='chezmoi'
+alias jl='jupyter lab'
