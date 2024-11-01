@@ -1,6 +1,6 @@
 # files
-alias tree='tree -a -I .git'
-alias l="${aliases[ls]:-ls} -A"
+alias t='tree -a -I .git'
+alias l="${aliases[ls]:-ls} -lhA,"
 
 # gradle
 alias gd='./gradlew'

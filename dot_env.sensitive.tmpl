@@ -6,7 +6,7 @@ export ORG_GRADLE_PROJECT_centralManualTestingAuthHeaderValue="Bearer {{ (bitwar
 export ORG_GRADLE_PROJECT_signingInMemoryKeyPassword={{ (bitwardenFields "item" "a26259d5-4666-4783-b362-b1fd01758d52").passphrase.value | quote }}
 export ORG_GRADLE_PROJECT_signingInMemoryKeyEmail={{ (bitwardenFields "item" "a26259d5-4666-4783-b362-b1fd01758d52").email.value | quote }}
 
-mavenSigningInMemoryKeyFile=".env.localvar.signingInMemoryKey"
+mavenSigningInMemoryKeyFile="$HOME/.env.localvar.signingInMemoryKey"
 if [ -f $mavenSigningInMemoryKeyFile ]; then
     export ORG_GRADLE_PROJECT_signingInMemoryKey=$(< $mavenSigningInMemoryKeyFile)
 else
