@@ -1,0 +1,8 @@
+{{- $email := promptStringOnce . "email" "Modify default email" "FlaviusPopescu@users.noreply.github.com" -}}
+{{- $username := promptStringOnce . "username" "Modify user name" "Flavius Popescu" -}}
+{{- $loadTokens := promptBoolOnce . "loadTokens"  "Load access tokens" false -}}
+data:
+    username: {{ $username | quote }}
+    email: {{ $email | quote }}
+    loadTokens: {{ $loadTokens }}
+
