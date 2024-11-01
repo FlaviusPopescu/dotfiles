@@ -1,6 +1,6 @@
 [user]
-	name = Flavius Popescu
-	email = FlaviusPopescu@users.noreply.github.com
+	name = {{ .username | quote }}
+	email = {{ .email | quote }}
 [alias]
 	authors = !git log --format='%aN <%aE>' | sort -u --ignore-case
 	b = branch
