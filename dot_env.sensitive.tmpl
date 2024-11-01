@@ -1,0 +1,26 @@
+{{ if .loadTokens }}
+export ORG_GRADLE_PROJECT_mavenCentralUsername={{ (bitwardenFields "item" "a26259d5-4666-4783-b362-b1fd01758d52").apiUsername.value | quote }}
+export ORG_GRADLE_PROJECT_mavenCentralPassword={{ (bitwardenFields "item" "a26259d5-4666-4783-b362-b1fd01758d52").apiPassword.value | quote }}
+export ORG_GRADLE_PROJECT_centralManualTestingAuthHeaderName="Authorization"
+export ORG_GRADLE_PROJECT_centralManualTestingAuthHeaderValue="Bearer {{ (bitwardenFields "item" "a26259d5-4666-4783-b362-b1fd01758d52").apiToken.value }}"
+export ORG_GRADLE_PROJECT_signingInMemoryKeyPassword={{ (bitwardenFields "item" "a26259d5-4666-4783-b362-b1fd01758d52").passphrase.value | quote }}
+export ORG_GRADLE_PROJECT_signingInMemoryKeyEmail={{ (bitwardenFields "item" "a26259d5-4666-4783-b362-b1fd01758d52").email.value | quote }}
+
+mavenSigningInMemoryKeyFile=".env.localvar.signingInMemoryKey"
+if [ -f $mavenSigningInMemoryKeyFile ]; then
+    export ORG_GRADLE_PROJECT_signingInMemoryKey=$(< $mavenSigningInMemoryKeyFile)
+else
+    export ORG_GRADLE_PROJECT_signingInMemoryKey=$(\
+    gpg --pinentry-mode=loopback --yes --passphrase "$ORG_GRADLE_PROJECT_signingInMemoryKeyPassword"\
+      --export-secret-keys --armor "$ORG_GRADLE_PROJECT_signingInMemoryKeyEmail" |\
+    grep -v '\-\-' | grep -v '^=.' | tr -d '\n')
+    echo $ORG_GRADLE_PROJECT_signingInMemoryKey > $mavenSigningInMemoryKeyFile
+fi
+
+export ORG_GRADLE_PROJECT_mapbox_download_token={{ (bitwardenFields "item" "0e295fc8-5a60-4b10-a833-b21b01254b75").downloadToken.value | quote }}
+export ORG_GRADLE_PROJECT_mapbox_access_token={{ (bitwardenFields "item" "0e295fc8-5a60-4b10-a833-b21b01254b75").accessToken.value | quote }}
+
+export ORG_GRADLE_PROJECT_ebird_access_token={{ (bitwardenFields "item" "f11afbab-64af-4d69-8de1-b21b0125636e").accessToken.value | quote }}
+
+export ANTHROPIC_API_KEY={{ (bitwardenFields "item" "75cf638d-f071-4644-a457-b21b0125807e").accessToken.value | quote }}
+{{ end }}
