@@ -63,7 +63,7 @@ source "$HOME/.env.android"
 source "$HOME/.env.jdk"
 source "$HOME/.env.sensitive"
 source "$HOME/.env.shell"
-source "$HOME/.py/.env.py"
+source "$HOME/.env.py"
 
 # aliases
 source "$HOME/.env.aliases"
